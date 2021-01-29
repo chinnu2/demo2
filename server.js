@@ -90,6 +90,26 @@ res.send((result.result.n === 1) ?
 })
 
 
+// PUT route to reduce value of specified attribute of the record in database
+app.put('/collection/:id/reduce/:name/:value', (req, res, next) => {
+
+    let value = -1 * parseInt(req.params.value);
+    let name = req.params.name;
+
+    const attr = {};
+    attr[name] = value;
+
+    req.collection.updateOne(
+        { _id: new ObjectID(req.params.id) },
+        { "$inc": attr },
+        { safe: true, multi: false },
+        (e, result) => {
+            if(e || result.result.n !== 1) return next();
+            res.json({ message: 'success' });
+        });
+});
+
+
 const port = process.env.PORT || 3000;
 app.listen(port,()=> {console.log('express server is runnimg at localhost:3000')
 })

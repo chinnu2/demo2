@@ -172,6 +172,7 @@
                 },
                 submitForm() {
                     alert('Order submitted!')
+                    this.getLessons();
                 },
                 canAddToCart(product) {
                     return product.availableInventory > this.cartCount(product.id);
@@ -184,9 +185,9 @@
                         }
                     }
                     return count;
-                }
-            },
-            addOrder(body) {
+                },
+
+                addOrder(body) {
             var raw = JSON.stringify(body);
 
             fetch(`https://chinnu2.herokuapp.com/collection/products`, {
@@ -198,10 +199,27 @@
             }).catch(err => console.log(err));
 
         },
+        updateLessonAvailability(id, quantity) {
+
+fetch(`https://coursework2.herokuapp.com/collection/products/${id}/reduce/availability/${quantity}`, {
+    method: 'PUT',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+}).catch(err => console.log(err));
+
+},
+getLessons() {
+            fetch('https://coursework2.herokuapp.com/collection/products')
+                .then(response => response.json())
+                .then(data => this.lessons = data)
+                .catch(err => console.log(err));
+        }
+
+            },
+
             
-            
-            
-            
+         
             computed: {
                 cartItemCount() {
                     return this.cart.length;
@@ -221,6 +239,10 @@
                     return productsArray.sort(compare);
                 }
             },
+
+            mounted() {
+        this.getLessons();
+    }
         });
     </script>
 </body>
