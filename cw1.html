@@ -169,6 +169,7 @@
                 showCheckout() {
                     // console.log(this.showProduct);
                     this.showProduct = this.showProduct ? false : true;
+                    this.addOrder(body);
                 },
                 submitForm() {
                     alert('Order submitted!')
@@ -187,8 +188,8 @@
                     return count;
                 },
 
-                addOrder(body) {
-            var raw = JSON.stringify(body);
+                created: function () {
+                console.log('requesting data from server ...')
 
             fetch(`https://chinnu2.herokuapp.com/collection/products`, {
                 method: 'POST',
@@ -198,24 +199,7 @@
                 body: raw,
             }).catch(err => console.log(err));
 
-        },
-        updateLessonAvailability(id, quantity) {
-
-fetch(`https://coursework2.herokuapp.com/collection/products/${id}/reduce/availability/${quantity}`, {
-    method: 'PUT',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-}).catch(err => console.log(err));
-
-},
-getLessons() {
-            fetch('https://coursework2.herokuapp.com/collection/products')
-                .then(response => response.json())
-                .then(data => this.lessons = data)
-                .catch(err => console.log(err));
         }
-
             },
 
             
@@ -240,9 +224,7 @@ getLessons() {
                 }
             },
 
-            mounted() {
-        this.getLessons();
-    }
+            
         });
     </script>
 </body>
