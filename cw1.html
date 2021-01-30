@@ -115,6 +115,7 @@
                    
                     <p>Price: {{product.price}}</p>
                     <p>Available stock: {{product.availableInventory -cartCount(product.id) }}</p>
+                    <p>{{cartCount(product.id) }}</p>
                     </div>
 
 
@@ -173,7 +174,23 @@
                 },
                 submitForm() {
                     alert('Order submitted!')
-                    this.getLessons();
+                    this.cart.forEach(product => {
+
+let body = {
+    "name": this.checkout.firstName,
+    "lastname": this.checkout.lastName,
+    "Product": product._id,
+    "noOfItem": product.availableInventory
+};
+this.newOrder(body);
+this.availableInventory(product);
+
+
+
+
+});
+this.cart = [];
+            this.showMessage = true;
                 },
                 canAddToCart(product) {
                     return product.availableInventory > this.cartCount(product.id);
@@ -188,18 +205,23 @@
                     return count;
                 },
 
-                created: function () {
-                console.log('requesting data from server ...')
+                newOrder(body) {
+                
 
             fetch(`https://chinnu2.herokuapp.com/collection/products`, {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: raw,
+                body: JSON.stringify({
+                    availableInventory: product.availableInventory
+                })
             }).catch(err => console.log(err));
 
         }
+
+
+
             },
 
             

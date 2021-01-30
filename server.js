@@ -91,7 +91,7 @@ res.send((result.result.n === 1) ?
 
 
 // PUT route to reduce value of specified attribute of the record in database
-app.put('/collection/:id/reduce/:name/:value', (req, res, next) => {
+app.put('/collection/:collectionName/:id/reduce/:name/:value', (req, res, next) => {
 
     let value = -1 * parseInt(req.params.value);
     let name = req.params.name;
@@ -108,6 +108,8 @@ app.put('/collection/:id/reduce/:name/:value', (req, res, next) => {
             res.json({ message: 'success' });
         });
 });
+
+
 
 
 const port = process.env.PORT || 3000;
