@@ -3,7 +3,7 @@
 <head>
     <title>Vue.js Pet Depot</title>
     <script src="https://unpkg.com/vue"></script>
-    <script src="products.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 </head>
 
@@ -18,7 +18,7 @@
         </header>
         <main>
             <div v-if='showProduct'>
-                <div v-for="product in sortedProducts">
+                <div v-for="product in products">
                     <h2 v-text="product.title"></h2>
                     <figure>
                         <img v-bind:src="product.image">
@@ -62,6 +62,8 @@
                     <input v-model.trim="order.lastName" />
                 </p>
                 
+                
+                   
 
                 <h2>Order Information</h2>
                 <p>First Name: {{order.firstName}}</p>
@@ -70,13 +72,7 @@
 
 
                 <button v-on:click="submitForm">Place Order</button>
-                <div v-for="product in products" v-if='cartCount(product.id)' >
-                    <h2 v-text="product.title"></h2>
-                   
-                    <p>Price: {{product.price}}</p>
-                    <p>Available stock: {{product.availableInventory  }}</p>
-                    <p>{{cartCount(product.id) }}</p>
-                    </div>
+                
 
 
             </div>
@@ -105,12 +101,7 @@
                     lastName: '',
                    
                 },
-                states: {
-                    AL: 'Alabama',
-                    AR: 'Arizona',
-                    CA: 'California',
-                    NV: 'Nevada'
-                },
+               
             },
             // created: function () {
             //     this.products = allProducts
@@ -118,13 +109,13 @@
             created: function () {
                 console.log('requesting data from server ...')
                 
-                fetch('https://chinnu2.herokuapp.com/collection/products').then(
+                fetch('https://chinnu2.herokuapp.com/collection/product').then(
                     function (response) {
                         response.json().then(
                             function (json) {
                                 // save the returned JSON object to
                                 // 'product' data property
-                                store.product = json;
+                                webstore.product = json;
                                 console.log(json);
                             });
                     }
@@ -136,24 +127,7 @@
                     
                     this.cart.push(product.id);
                     product.availableInventory = product.availableInventory - 1;
-                    // console.log('adding to cart', product.id)
-                    //const newProduct = {availableInventory: product.availableInventory -cartCount(product.id) };
-                    fetch('https://chinnu2.herokuapp.com/collection/orders', {
-                     method: 'POST', // set the HTTP method as 'POST'
-                     headers: {
-                     'Content-Type': 'application/json', // set the data type as JSON
-                     },
-                      body: JSON.stringify(product), // need to stringify the JSON object
-    //availableInventory=product.availableInventory -cartCount(product.id)
-                    })
-                      .then(response => response.json())
-                    .then(responseJSON => {
-                    document.getElementById('response').innerText = JSON.stringify(responseJSON);
-                    })
-                     .catch((error) => {
-                  document.getElementById('error').innerText = error;
-                  });
-
+                    
                 },
                 showCheckout() {
                     // console.log(this.showProduct);
@@ -212,23 +186,7 @@
     </script>
 
 
-<script>
-  this.availableInventory;
-fetch('https://chinnu2.herokuapp.com/collection/products', {
-    method: 'POST', // set the HTTP method as 'POST'
-    headers: {
-        'Content-Type': 'application/json', // set the data type as JSON
-    },
-    body: JSON.stringify(newProduct), // need to stringify the JSON object
-})
-    .then(response => response.json())
-    .then(responseJSON => {
-        document.getElementById('response').innerText = JSON.stringify(responseJSON);
-    })
-    .catch((error) => {
-        document.getElementById('error').innerText = error;
-    });
-</script>
+
 </body>
 
 </html>
