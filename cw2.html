@@ -61,52 +61,12 @@
                     <!-- This input field is bound to 'lastName' in the 'order' object -->
                     <input v-model.trim="order.lastName" />
                 </p>
-                <p>
-                    <strong>Address:</strong>
-                    <input v-model="order.address" />
-                </p>
-                <p>
-                    <strong>City:</strong>
-                    <input v-model="order.city" />
-                </p>
-                <p>
-                    <strong>State:</strong>
-                    <select v-model="order.state">
-                        <option disabled value="">State</option>
-                        <option v-for="(state, key) in states" v-bind:value="state">
-                            {{key}}
-                        </option>
-                        <!-- <option v-bind:value="states.AL">AL</option>
-                        <option v-bind:value="states.AR">AR</option>
-                        <option v-bind:value="states.CA">CA</option>
-                        <option v-bind:value="states.NV">NV</option> -->
-                    </select>
-                </p>
-                <p>
-                    <strong>Zip / Postal Code:</strong>
-                    <input v-model.number="order.zip" type="number" />
-                </p>
-
-                <p><input type="checkbox" id="gift" value="true" v-model="order.gift" v-bind:true-value="order.sendGift"
-                        v-bind:false-value="order.dontSendGift">
-                    <label for="gift">Ship As Gift?</label></p>
-
-                <p>
-                    <input type="radio" id="home" value="Home" v-model="order.method">
-                    <label for="home">Home</label>
-                    <input type="radio" id="business" value="Business" v-model="order.method">
-                    <label for="business">Business</label>
-                </p>
+                
 
                 <h2>Order Information</h2>
                 <p>First Name: {{order.firstName}}</p>
                 <p>Last Name: {{order.lastName}}</p>
-                <p>Address: {{order.address}}</p>
-                <p>City: {{order.city}}</p>
-                <p>Zip: {{order.zip}}</p>
-                <p>State: {{order.state}}</p>
-                <p>Gift? {{order.gift}}</p>
-                <p>Method: {{order.method}}</p>
+                
 
 
                 <button v-on:click="submitForm">Place Order</button>
@@ -128,7 +88,7 @@
             el: '#app',
             data: {
                 sitename: 'Vue.js Pet Depot',
-                products: products,
+                products: [],
                 // product: {
                 //     id: 1001,
                 //     title: "Cat Food, 25lb bag",
@@ -143,14 +103,7 @@
                 order: {
                     firstName: '',
                     lastName: '',
-                    address: '',
-                    city: '',
-                    zip: '',
-                    state: '',
-                    method: 'Home',
-                    gift: 'Send as a gift',
-                    sendGift: 'Send as a gift',
-                    dontSendGift: 'Do not send as a gift'
+                   
                 },
                 states: {
                     AL: 'Alabama',
@@ -162,6 +115,22 @@
             // created: function () {
             //     this.products = allProducts
             // },
+            created: function () {
+                console.log('requesting data from server ...')
+                
+                fetch('https://chinnu2.herokuapp.com/collection/products').then(
+                    function (response) {
+                        response.json().then(
+                            function (json) {
+                                // save the returned JSON object to
+                                // 'product' data property
+                                store.product = json;
+                                console.log(json);
+                            });
+                    }
+                )
+            },
+
             methods: {
                 addToCart(product) {
                     
